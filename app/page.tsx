@@ -1,101 +1,161 @@
-import Image from "next/image";
+"use client";
+
+import { deleteUserByIdAPI, getUserInfoAPI } from "@/apis/user";
+import { EmpInfo } from "@/type/emp";
+import { useEffect, useState } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  // 管理员工数据
+  const [data, setData] = useState<EmpInfo[]>([]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
+  // 获取员工数据
+  const getUserInfo = async () => {
+    const res = await getUserInfoAPI();
+    // console.log(res);
+    setData(res.data);
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  // 用与管理被选中用户
+  const [checkboxItems, setCheckboxItems] = useState<string[]>();
+
+  // 处理某个复选框被点中
+  const handleCheckboxChange = (idx: number) => {
+    const isExist = checkboxItems?.some((item) => {
+      return item === `checkboxItem-${idx}`;
+    });
+    if (isExist) {
+      setCheckboxItems(
+        checkboxItems?.filter((item) => {
+          return item !== `checkboxItem-${idx}`;
+        })
+      );
+    } else {
+      setCheckboxItems([...(checkboxItems || []), `checkboxItem-${idx}`]);
+    }
+  };
+
+  // 点击全选按钮
+  const handleCheckAllBox = () => {
+    // 不管是否全选都要先将选择的item去掉
+    setCheckboxItems([]);
+    if (checkboxItems?.length !== data.length) {
+      const ids: string[] = data.map((item) => {
+        return `checkboxItem-${item.id}`;
+      });
+      setCheckboxItems(ids);
+    }
+  };
+
+  // 处理删除按钮点击事件
+  const handleDelButtonClick = async (id: number) => {
+    // 调用删除api
+    await deleteUserByIdAPI(id);
+    // 刷新员工数据
+    getUserInfo();
+    toast("删除用户成功");
+  };
+
+  return (
+    <div className="max-w-screen-xl mx-auto px-4 md:px-8 md:my-5">
+      <div className="items-start justify-between md:flex">
+        <div className="max-w-lg">
+          <h3 className="text-gray-800 text-xl font-bold sm:text-2xl">
+            Team members
+          </h3>
+          <p className="text-gray-600 mt-2">
+            is a you team emp, you need to manager them;
+          </p>
+        </div>
+        <div className="mt-3 md:mt-0">
           <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="javascript:void(0)"
+            className="inline-block px-4 py-2 text-white duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
+            Add member
           </a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+      <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
+        <table className="w-full table-auto text-sm text-left">
+          <thead className="text-gray-600 font-medium border-b">
+            <tr>
+              <th className="py-3 px-6 flex items-center gap-x-4">
+                <div>
+                  <input
+                    type="checkbox"
+                    id="checkbox-all-items"
+                    className="checkbox-item peer hidden"
+                    checked={checkboxItems?.length === data.length}
+                    onChange={() => handleCheckAllBox()}
+                  ></input>
+                  <label
+                    htmlFor="checkbox-all-items"
+                    className="relative flex w-5 h-5 bg-white peer-checked:bg-indigo-600 rounded-md border ring-offset-2 ring-indigo-600 duration-150 peer-active:ring cursor-pointer after:absolute after:inset-x-0 after:top-[3px] after:m-auto after:w-1.5 after:h-2.5 after:border-r-2 after:border-b-2 after:border-white after:rotate-45"
+                  ></label>
+                </div>
+                Username
+              </th>
+              <th className="py-3 px-6">name</th>
+              <th className="py-3 px-6">gender</th>
+              <th className="py-3 px-6">createTime</th>
+            </tr>
+          </thead>
+          <tbody className="text-gray-600 divide-y">
+            {data.map((item) => (
+              <tr key={item.id} className="odd:bg-gray-50 even:bg-white">
+                <td className="px-6 py-4 whitespace-nowrap flex items-center gap-x-4">
+                  <div>
+                    <input
+                      type="checkbox"
+                      id={`checkbox-${item.id}`}
+                      name={`checkbox-${item.id}`}
+                      className="checkbox-item peer hidden"
+                      checked={checkboxItems?.some(
+                        (checkedItem) =>
+                          checkedItem === `checkboxItem-${item.id}`
+                      )}
+                      onChange={() => handleCheckboxChange(item.id)}
+                    />
+                    <label
+                      htmlFor={`checkbox-${item.id}`}
+                      className="relative flex w-5 h-5 bg-white peer-checked:bg-indigo-600 rounded-md border ring-offset-2 ring-indigo-600 duration-150 peer-active:ring cursor-pointer after:absolute after:inset-x-0 after:top-[3px] after:m-auto after:w-1.5 after:h-2.5 after:border-r-2 after:border-b-2 after:border-white after:rotate-45"
+                    ></label>
+                  </div>
+                  {item.username}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {item.gender === 1 ? "男" : "女"}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {item.createTime}
+                </td>
+                <td className="text-right px-6 whitespace-nowrap">
+                  <a
+                    href="javascript:void()"
+                    className="py-2 px-3 font-medium text-indigo-600 hover:text-indigo-500 duration-150 hover:bg-gray-50 rounded-lg"
+                  >
+                    Edit
+                  </a>
+                  <button
+                    className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
+                    onClick={() => handleDelButtonClick(item.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <Toaster position="top-center" duration={3000} />
     </div>
   );
 }
