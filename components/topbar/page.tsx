@@ -14,11 +14,9 @@ import {
 import { Sun, Moon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useTheme } from "next-themes";
-
-type HoverMenu = string[];
 interface TopBarMenu {
   title: string;
-  hoverMenuItems: HoverMenu;
+  hoverMenuItems: string[];
 }
 const TopBar = () => {
   const topbarMenu: TopBarMenu[] = [
