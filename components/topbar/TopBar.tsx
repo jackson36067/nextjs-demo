@@ -118,7 +118,7 @@ const LoseWidthComponent = () => (
         animate={{ opacity: 1, y: 0 }} // 掉落到正常位置
         exit={{ opacity: 0, y: "-100vh" }} // 关闭时返回顶部
         transition={{ duration: 0.5, ease: "easeOut" }} // 平滑过渡
-        className="w-screen h-screen bg-[#191e1e] text-white flex flex-col items-start justify-start p-8 z-[9999]"
+        className="w-screen h-screen bg-[#191e1e] text-white flex flex-col items-start justify-start p-8 z-[9999] overflow-y-auto"
       >
         <Accordion type="single" collapsible className="w-full">
           {topbarMenu.map((item, index) => {
