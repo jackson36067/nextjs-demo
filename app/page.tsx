@@ -5,6 +5,18 @@ import { EmpInfo } from "@/type/emp";
 import { useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from "@/components/ui/alert-dialog";
 
 export default function Home() {
   // 管理员工数据
@@ -143,12 +155,33 @@ export default function Home() {
                   >
                     Edit
                   </a>
-                  <button
-                    className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
-                    onClick={() => handleDelButtonClick(item.id)}
-                  >
-                    Delete
-                  </button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <a
+                        href="#"
+                        className="py-2 px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
+                      >
+                        Delete
+                      </a>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle className="text-black dark:text-white">
+                          你确定要删除这个员工吗
+                        </AlertDialogTitle>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="text-black dark:text-white">
+                          取消
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelButtonClick(item.id)}
+                        >
+                          确定
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </td>
               </tr>
             ))}
