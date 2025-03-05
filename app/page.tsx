@@ -62,20 +62,20 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto px-4 md:px-8 md:my-5">
-      <div className="items-start justify-between md:flex">
+    <div className="max-w-screen-xl mx-auto px-4 md:px-8 bg-white text-[#1b1f23] dark:bg-black dark:text-white">
+      <div className="items-start justify-between md:flex mt-5">
         <div className="max-w-lg">
-          <h3 className="text-gray-800 text-xl font-bold sm:text-2xl">
+          <h3 className="text-gray-800 dark:text-white text-xl font-bold sm:text-2xl">
             Team members
           </h3>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-600 dark:text-white mt-2">
             is a you team emp, you need to manager them;
           </p>
         </div>
         <div className="mt-3 md:mt-0">
           <a
             href="javascript:void(0)"
-            className="inline-block px-4 py-2 text-white duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"
+            className="inline-block px-4 py-2 text-white dark:text-black duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"
           >
             Add member
           </a>
@@ -83,7 +83,7 @@ export default function Home() {
       </div>
       <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
         <table className="w-full table-auto text-sm text-left">
-          <thead className="text-gray-600 font-medium border-b">
+          <thead className="text-gray-600 dark:text-white font-medium border-b">
             <tr>
               <th className="py-3 px-6 flex items-center gap-x-4">
                 <div>
@@ -106,9 +106,9 @@ export default function Home() {
               <th className="py-3 px-6">createTime</th>
             </tr>
           </thead>
-          <tbody className="text-gray-600 divide-y">
+          <tbody className="text-gray-600 dark:text-white divide-y">
             {data.map((item) => (
-              <tr key={item.id} className="odd:bg-gray-50 even:bg-white">
+              <tr key={item.id} className="bg-white dark:bg-black">
                 <td className="px-6 py-4 whitespace-nowrap flex items-center gap-x-4">
                   <div>
                     <input
